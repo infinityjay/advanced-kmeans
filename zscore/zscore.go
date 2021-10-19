@@ -14,7 +14,7 @@ func ZScore(dataset []float64) ([]float64, error){
 	v := sum / float64(len(dataset) -1)
 	sigma := math.Sqrt(v)
 	for _, data := range dataset{
-		z = append(z, math.Abs(data - mu) / sigma)
+		z = append(z, (data - mu) / sigma)
 	}
 	return z, nil
 }

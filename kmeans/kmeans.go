@@ -14,13 +14,11 @@ func createClusters(dataset []float64, centers []float64) ([][]float64, error) {
 		minDis := math.MaxFloat64
 		for i, center := range centers{
 			dis := (data - center) * (data - center)
-			fmt.Printf("the difference between centers: %v\n", dis)
 			if minDis > dis {
 				minDis = dis
 				centerIndex = i
 			}
 		}
-		fmt.Printf("the centerIndex: %v\n", centerIndex)
 		clusters[centerIndex] = append(clusters[centerIndex], data)
 	}
 	return clusters, nil
@@ -80,12 +78,10 @@ func Kmeans(dataset []float64, k int) ([]float64, [][]float64, error) {
 	flag := true
 	//step1: calculate the centers of each cluster
 	centers, err := initCenter(dataset, k)
-	fmt.Printf("the initial centers: %v\n", centers)
 	if err != nil {
 		fmt.Printf("fail to calculate the centers: %v\n", err)
 	}
 	clusters, _ = createClusters(dataset, centers)
-	fmt.Printf("the initial clusters: %v\n", clusters)
 	for j := 0; j < maxIterations && flag; j++ {
 		clusters, _ = createClusters(dataset, centers)
 		newCenters = updateCenters(centers, clusters)
@@ -110,10 +106,7 @@ func BestKmeans(dataset []float64, k1 int, k2 int) (int, [][]float64){
 	var sse []float64
 	for k := k1; k <= k2; k++ {
 		//step3: evaluate the cluster results
-		fmt.Printf("the k = or cluster number: %v\n", k)
 		centers, clusters, err := Kmeans(dataset, k)
-		fmt.Printf("centers: %v\n", centers)
-		fmt.Printf("clusters: %v\n", clusters)
 		if err != nil {
 			fmt.Printf("fail to run Kmeans!")
 		}
@@ -125,15 +118,11 @@ func BestKmeans(dataset []float64, k1 int, k2 int) (int, [][]float64){
 			for j, c := range clu {
 				d += (c - aver) * (c - aver)
 				n = j + 1
-				fmt.Printf("d of cluster %v is : %v\n", n, d)
 			}
 			w = w + d / float64(2 * n)
-			fmt.Printf("Centered at x: %.2f\n", centers[i])
-			fmt.Printf("Matching data points: %+v\n\n", clu)
 		}
 		sse = append(sse, w)
 	}
-	fmt.Printf("sse : %v\n", sse)
 	gap := make([]float64, num)
 	gapSquare := make([]float64, num)
 	maxElbow := float64(0)
